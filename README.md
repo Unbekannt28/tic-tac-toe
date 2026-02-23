@@ -40,3 +40,6 @@ or
 ## People involved
 - Mika Schiessler ([Unbekannt28](https://github.com/Unbekannt28))
 - Nils Marten ([NichtNil5](https://github.com/NichtNil5))
+
+## Licensing
+- Icons by Material Design Icons (Apache License 2.0)
