@@ -1,0 +1,67 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    background-color: #FFF9F9;
+}
+
+.tictactoe-box{
+    height: 80vmin;
+    aspect-ratio: 1 / 1;
+    display: grid;
+    gap: min(3%, 5px);
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    background-color: #FCF6F6;
+    padding: 2vmin;
+    border-radius: 5%;
+}
+
+.tictactoe-fields {
+    background-color: #D77FA1;
+    color: #FCF6F6;
+    font-size: clamp(2rm, 8rm, 10rm);
+    font-weight: bolder;
+    border-radius: 5%;
+    cursor: pointer;
+    border-color: transparent;
+    box-shadow: none;
+    display: grid;
+    place-items: center;
+    container-type: inline-size;
+    transition-timing-function: ease-in-out;
+    transition-duration: 50ms;
+}
+
+
+.tictactoe-fields span {
+  font-size: 40cqw; 
+  font-weight: bold;
+  line-height: 1;
+}
+
+.tictactoe-fields:hover {background-color: #C76F91;}
+.tictactoe-fields:active {transform:scale(.97);}
+
+.marked_by_o {
+    color: #BAABDA !important;
+    background-color: #B75F81 !important;
+}
+
+.marked_by_o:hover,
+.marked_by_o:active {
+    background-color:#B75F81 !important;
+    transform:none !important;   
+}
+
+.marked_by_x {
+    color: #D6E5FA !important;
+    background-color: #B75F81 !important;
+}
+
+.marked_by_x:hover,
+.marked_by_x:active {
+    background-color:#b65656 !important;
+    transform:none !important;   
+}
