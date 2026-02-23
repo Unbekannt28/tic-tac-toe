@@ -1,5 +1,8 @@
 # Tic Tac Toe Multiplayer Game
 This game was developed for a programming project during our Computer Science studies at Christian Albrechts University Kiel.
+## Structure
+### Database
+![UML scheme of Database](https://github.com/Unbekannt28/tic-tac-toe/blob/main/uml_diagram.svg "UML scheme of Database")
 ## Installation
 To run this flask-based Web Application you need to install a modern python3 version (e.g. 3.14.3) and some dependencies. These can be found in `requirements.txt`.
 It is recommended to use a virtual environment for the installation of python modules.
