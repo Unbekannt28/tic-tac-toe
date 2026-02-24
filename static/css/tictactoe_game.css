@@ -20,7 +20,6 @@ body{
 .tictactoe-fields {
     background-color: var(--main_color);
     color: var(--background_color_secondary);
-    font-size: clamp(2rm, 8rm, 10rm);
     font-weight: bolder;
     border-radius: 5%;
     cursor: pointer;
