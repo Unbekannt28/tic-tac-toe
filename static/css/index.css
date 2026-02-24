@@ -1,0 +1,32 @@
+body {
+    background-image: url("../img/tic_tac_toe.jpeg");
+    background-size: cover;
+    background-color: rgba(255, 249, 249, 0.8);
+    background-blend-mode: lighten;
+    min-height: 100vh;
+
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+h1 {
+    font-size: 50pt;
+    background: linear-gradient(90deg,rgba(255, 161, 170, 1) 0%, rgba(186, 112, 204, 1) 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.content > p {
+    text-align: center;
+    font-size: 22pt;
+}
+
+.content .icon-text-button p, .content .icon-text-button span {
+    font-size: 28pt;
+}
