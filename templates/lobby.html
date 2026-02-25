@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"><!--Material Design Icons-->
+    <link rel="stylesheet" href="css/lobby.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+    <div class="header">
+        <div class="left-section">
+            <a href="/" class="icon-text-button">
+                <span class="mdi mdi-chevron-left"></span>
+                <p>Startseite</p>
+            </a>
+            <a href="leaderboard" class="icon-text-button">
+                <span class="mdi mdi-list-box"></span>
+                <p>Leaderboard</p>
+            </a>
+        </div>
+        <div class="right-section">
+            <a href="login" class="icon-text-button">
+                <span class="mdi mdi-account-outline"></span>
+                <p>Login</p>
+            </a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="new-game">
+            <h1>Neues Spiel</h1>
+            <p>Hier kannst du eine neue Partie gegen einen Freund starten</p>
+            <form action="lobby/create_game" method="post">
+                <h2>Gegner einladen</h2>
+                <input type="text" name="opponent" id="opponent" placeholder="Nutzername des Gegeners..." required>
+                <h2>Eigenes Team wählen</h2>
+                <div class="select-team">
+                    <input type="radio" name="own-team" id="own-team-1" value="1" required>
+                    <label for="own-team-1">Team X</label>
+                    <br>
+                    <input type="radio" name="own-team" id="own-team-2" value="2" required>
+                    <label for="own-team-2">Team O</label>
+                </div>
+                <h2>Neues Spiel anlegen</h2>
+                <button class="icon-text-button" type="submit">
+                    <span class="mdi mdi-plus"></span>
+                    <p>Spiel Erstellen</p>
+                </button>
+            </form>
+        </div>
+        <hr>
+        <div class="open-games">
+            <h1>Offene Spiele</h1>
+            <p>An dieser Stelle werden alle ausstehenden bzw. noch nicht zu Ende gespielten Spiele angezeigt</p>
+
+        </div>
+        <hr>
+        <div class="played-games">
+            <h1>Gespielte Spiele</h1>
+            <p>Deine vergangenen Spiele kannst du dir hier ansehen</p>
+
+        </div>
+        
+    </div>
+</body>
+</html>

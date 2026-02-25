@@ -28,6 +28,7 @@ body{
 }
 
 .icon-text-button {
+    border: none;
     border-radius: 7px;
     padding: 0.8em;
     text-decoration: none;
@@ -53,4 +54,15 @@ body{
 
 .icon-text-button span {
     margin-right: 0.35em;
+}
+
+input[type="text"] {
+    border-radius: 0.5em;
+    border: black solid 1px;
+    font-size: 14pt;
+    padding: 0.3em;
+}
+
+label {
+    font-size: 14pt;
 }

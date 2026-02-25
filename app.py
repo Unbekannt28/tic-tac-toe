@@ -16,6 +16,10 @@ app = Flask(__name__, static_url_path="/")
 def main():
     return render_template("index.html")
 
+@app.route("/lobby")
+def lobby():
+    return render_template("lobby.html")
+
 @app.route("/play")
 def play():
     #Will be fild with X and Os through the game.
