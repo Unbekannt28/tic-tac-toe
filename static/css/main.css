@@ -50,3 +50,7 @@ body{
     font-size: 18pt;
     margin: 0;
 }
+
+.icon-text-button span {
+    margin-right: 0.35em;
+}
