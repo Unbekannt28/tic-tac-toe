@@ -57,12 +57,25 @@ body{
 }
 
 input[type="text"] {
-    border-radius: 0.5em;
+    border-radius: 7px;
     border: black solid 1px;
     font-size: 14pt;
-    padding: 0.3em;
+    padding: 0.5em;
+    background-color: var(--background_color);
 }
 
 label {
     font-size: 14pt;
+}
+
+.entry {
+    background: var(--background_color_secondary);
+    padding: 20px;
+    border-radius: 7px;
+    box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+}
+
+.entry-first-heading {
+    margin-top: 0;
 }

@@ -28,11 +28,11 @@
         </div>
     </div>
     <div class="content">
-        <div class="new-game">
-            <h1>Neues Spiel</h1>
-            <p>Hier kannst du eine neue Partie gegen einen Freund starten</p>
+        <h1>Neues Spiel</h1>
+        <p>Hier kannst du eine neue Partie gegen einen Freund starten</p>
+        <div class="new-game entry">
             <form action="lobby/create_game" method="post">
-                <h2>Gegner einladen</h2>
+                <h2 class="entry-first-heading">Gegner einladen</h2>
                 <input type="text" name="opponent" id="opponent" placeholder="Nutzername des Gegeners..." required>
                 <h2>Eigenes Team wählen</h2>
                 <div class="select-team">
@@ -50,16 +50,14 @@
             </form>
         </div>
         <hr>
+        <h1>Offene Spiele</h1>
+        <p>An dieser Stelle werden alle ausstehenden bzw. noch nicht zu Ende gespielten Spiele angezeigt</p>
         <div class="open-games">
-            <h1>Offene Spiele</h1>
-            <p>An dieser Stelle werden alle ausstehenden bzw. noch nicht zu Ende gespielten Spiele angezeigt</p>
-
         </div>
         <hr>
+        <h1>Gespielte Spiele</h1>
+        <p>Deine vergangenen Spiele kannst du dir hier ansehen</p>
         <div class="played-games">
-            <h1>Gespielte Spiele</h1>
-            <p>Deine vergangenen Spiele kannst du dir hier ansehen</p>
-
         </div>
         
     </div>
