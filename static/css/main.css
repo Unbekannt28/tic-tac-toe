@@ -14,6 +14,24 @@ body{
     margin: 0;
 }
 
+h1 {
+    margin-bottom: 0.2em;
+}
+
+h2 {
+    margin-top: 2em;
+    margin-bottom: 0.3em;
+    font-size: 14pt;
+}
+
+p {
+    margin-top: 0;
+}
+
+label {
+    font-size: 14pt;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -25,6 +43,10 @@ body{
 .header > div {
     display: flex;
     gap: 1em;
+}
+
+.content {
+    margin: 4em;
 }
 
 .icon-text-button {
@@ -56,16 +78,13 @@ body{
     margin-right: 0.35em;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
     border-radius: 7px;
     border: black solid 1px;
     font-size: 14pt;
     padding: 0.5em;
     background-color: var(--background_color);
-}
-
-label {
-    font-size: 14pt;
+    width: 15em;
 }
 
 .entry {
