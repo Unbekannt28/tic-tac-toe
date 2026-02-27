@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from werkzeug import security
 import sqlite3
 
@@ -15,6 +15,9 @@ con.commit()
 con.close()
 
 app = Flask(__name__, static_url_path="/")
+
+# Secret key for sessions
+app.secret_key = "SUPER_SECURE_KEY_100%"
 
 # Index
 @app.route("/")
@@ -37,19 +40,54 @@ def create_user():
     cur = con.cursor()
     cur.execute("INSERT INTO users (name, password) VALUES (?, ?)", (username, hashed_password))
     con.commit()
+    response = cur.execute("SELECT id FROM users WHERE name=?", (username,))
+    user_id = response.fetchone()[0]
     con.close()
     
-    #TODO: login
+    # Login the newly registered user
+    new_session(user_id, username)
+
     return redirect("/lobby")
 
 # Login
+def new_session(user_id, username):
+    session["logged_in"] = True
+    session["user_id"] = user_id
+    session["username"] = username
+
+def close_session():
+    session["logged_in"] = None
+    session["user_id"] = None
+    session["username"] = None
+
 @app.route("/login")
 def login():
     return render_template("login.html")
 
-@app.route("/login/start_session")
+@app.route("/login/start_session", methods=["POST"])
 def start_session():
-    pass
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # Database communication
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    response = cur.execute("SELECT id, password FROM users WHERE name=?", (username,))
+    data = response.fetchone()
+    con.close()
+
+    # Check if user exists
+    if data == None:
+        return redirect("/login") #TODO: add error message "wrong username or password"
+    
+    # Check password
+    if not security.check_password_hash(data[1], password):
+        return redirect("/login") #TODO: add error message "wrong username or password"
+    
+    # Login successful
+    new_session(data[0], username)
+
+    return redirect("/lobby")
 
 # Game Lobby
 @app.route("/lobby")
