@@ -22,8 +22,12 @@
         </div>
         <div class="right-section">
             {% if session["logged_in"] %}
-                <a href="login/end_session" class="icon-text-button">
+                <div class="username-display">
                     <span class="mdi mdi-account"></span>
+                    <p class="username-display">{{session["username"]}}</p>
+                </div>
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-logout"></span>
                     <p>Logout</p>
                 </a>
             {% else %}
