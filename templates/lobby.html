@@ -39,38 +39,49 @@
         </div>
     </div>
     <div class="content">
-        <h1>Neues Spiel</h1>
-        <p>Hier kannst du eine neue Partie gegen einen Freund starten</p>
-        <div class="new-game entry">
-            <form action="lobby/create_game" method="post">
-                <h2 class="entry-first-heading">Gegner einladen</h2>
-                <input type="text" name="opponent" id="opponent" placeholder="Nutzername des Gegeners..." required>
-                <h2>Eigenes Team wählen</h2>
-                <div class="select-team">
-                    <input type="radio" name="own-team" id="own-team-1" value="1" required>
-                    <label for="own-team-1">Team X</label>
-                    <br>
-                    <input type="radio" name="own-team" id="own-team-2" value="2" required>
-                    <label for="own-team-2">Team O</label>
-                </div>
-                <h2>Neues Spiel anlegen</h2>
-                <button class="icon-text-button" type="submit">
-                    <span class="mdi mdi-plus"></span>
-                    <p>Spiel Erstellen</p>
-                </button>
-            </form>
-        </div>
-        <hr>
-        <h1>Offene Spiele</h1>
-        <p>An dieser Stelle werden alle ausstehenden bzw. noch nicht zu Ende gespielten Spiele angezeigt</p>
-        <div class="open-games">
-        </div>
-        <hr>
-        <h1>Gespielte Spiele</h1>
-        <p>Deine vergangenen Spiele kannst du dir hier ansehen</p>
-        <div class="played-games">
-        </div>
-        
+        {% if session["logged_in"] %}
+            <h1>Neues Spiel</h1>
+            <p>Hier kannst du eine neue Partie gegen einen Freund starten</p>
+            <div class="new-game entry">
+                <form action="lobby/create_game" method="post">
+                    <h2 class="entry-first-heading">Gegner einladen</h2>
+                    <input type="text" name="opponent" id="opponent" placeholder="Nutzername des Gegeners..." required>
+                    <h2>Eigenes Team wählen</h2>
+                    <div class="select-team">
+                        <input type="radio" name="own-team" id="own-team-1" value="1" required>
+                        <label for="own-team-1">Team X</label>
+                        <br>
+                        <input type="radio" name="own-team" id="own-team-2" value="2" required>
+                        <label for="own-team-2">Team O</label>
+                    </div>
+                    <h2>Neues Spiel anlegen</h2>
+                    <button class="icon-text-button" type="submit">
+                        <span class="mdi mdi-plus"></span>
+                        <p>Spiel Erstellen</p>
+                    </button>
+                </form>
+            </div>
+            <hr>
+            <h1>Offene Spiele</h1>
+            <p>An dieser Stelle werden alle ausstehenden bzw. noch nicht zu Ende gespielten Spiele angezeigt</p>
+            <div class="open-games">
+            </div>
+            <hr>
+            <h1>Gespielte Spiele</h1>
+            <p>Deine vergangenen Spiele kannst du dir hier ansehen</p>
+            <div class="played-games">
+            </div>
+        {% else %}
+            <h1>Anmeldung erforderlich</h1>
+            <p>Um Spiele gegen andere Spieler starten zu können, musst du dich <a href="login">hier</a> anmelden.</p>
+            <p>Falls du noch keinen Account hast, musst du dich erst registrieren:</p>
+            <div class="register-button-section">
+                <a href="register" class="icon-text-button">
+                    <span class="mdi mdi-account"></span>
+                    <p>Jetzt Registrieren!</p>
+                </a>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
