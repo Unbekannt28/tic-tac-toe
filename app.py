@@ -19,6 +19,19 @@ app = Flask(__name__, static_url_path="/")
 # Secret key for sessions
 app.secret_key = "SUPER_SECURE_KEY_100%"
 
+def new_session(user_id, username):
+    session["logged_in"] = True
+    session["user_id"] = user_id
+    session["username"] = username
+
+def close_session():
+    session["logged_in"] = None
+    session["user_id"] = None
+    session["username"] = None
+
+
+# Routes
+
 # Index
 @app.route("/")
 def main():
@@ -50,19 +63,15 @@ def create_user():
     return redirect("/lobby")
 
 # Login
-def new_session(user_id, username):
-    session["logged_in"] = True
-    session["user_id"] = user_id
-    session["username"] = username
-
-def close_session():
-    session["logged_in"] = None
-    session["user_id"] = None
-    session["username"] = None
-
 @app.route("/login")
 def login():
-    return render_template("login.html")
+    # Check if there is an error message
+    wrong_credentials = False
+    message = request.args.get("message")
+    if message == "wrong_credentials":
+        wrong_credentials = True
+
+    return render_template("login.html", wrong_credentials=wrong_credentials)
 
 @app.route("/login/start_session", methods=["POST"])
 def start_session():
@@ -78,11 +87,11 @@ def start_session():
 
     # Check if user exists
     if data == None:
-        return redirect("/login") #TODO: add error message "wrong username or password"
+        return redirect("/login?message=wrong_credentials")
     
     # Check password
     if not security.check_password_hash(data[1], password):
-        return redirect("/login") #TODO: add error message "wrong username or password"
+        return redirect("/login?message=wrong_credentials")
     
     # Login successful
     new_session(data[0], username)

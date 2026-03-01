@@ -40,6 +40,9 @@
                     <span class="mdi mdi-login"></span>
                     <p>Login</p>
                 </button>
+                {% if wrong_credentials %}
+                    <p class="error-message">Falscher Benutzername oder falsches Passwort</p>
+                {% endif %}
             </form>
         </div>
     </div>

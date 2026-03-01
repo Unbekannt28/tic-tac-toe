@@ -6,6 +6,7 @@
     --background_color_secondary: #F7F4F0;
     --o_color: #BFB1DF;
     --x_color: #FAC6A0;
+    --error_message: red;
 }
 
 body{
@@ -97,4 +98,10 @@ input[type="text"], input[type="password"] {
 
 .entry-first-heading {
     margin-top: 0;
+}
+
+.error-message {
+    color: var(--error_message);
+    margin-top: 1em;
+    margin-bottom: 0;
 }
