@@ -40,17 +40,38 @@ def main():
 # Register
 @app.route("/register")
 def register():
-    return render_template("register.html")
+    # Check if there is an error message
+    username_taken = False
+    field_empty = False
+    message = request.args.get("message")
+    if message == "username_taken":
+        username_taken = True
+    elif message == "field_empty":
+        field_empty = True
+
+    return render_template("register.html", username_taken=username_taken, field_empty=field_empty)
 
 @app.route("/register/create_user", methods=["POST"])
 def create_user():
     username = request.form.get("username")
     password = request.form.get("password")
+
+    # Check if username or password are empty
+    if username == "" or password == "":
+        return redirect("/register?message=field_empty")
+
     hashed_password = security.generate_password_hash(password)
 
     # Database communication
     con = sqlite3.connect("database.db")
     cur = con.cursor()
+    response = cur.execute("SELECT id FROM users WHERE name=?", (username,))
+
+    # Check if user already exists
+    if response.fetchone():
+        return redirect("/register?message=username_taken")
+
+    # Database communication
     cur.execute("INSERT INTO users (name, password) VALUES (?, ?)", (username, hashed_password))
     con.commit()
     response = cur.execute("SELECT id FROM users WHERE name=?", (username,))
@@ -62,7 +83,7 @@ def create_user():
 
     return redirect("/lobby")
 
-# Login
+# Login / Logout
 @app.route("/login")
 def login():
     # Check if there is an error message
@@ -97,6 +118,11 @@ def start_session():
     new_session(data[0], username)
 
     return redirect("/lobby")
+
+@app.route("/login/end_session")
+def end_session():
+    close_session()
+    return redirect("/")
 
 # Game Lobby
 @app.route("/lobby")

@@ -21,19 +21,33 @@
             </a>
         </div>
         <div class="right-section">
-            <a href="login" class="icon-text-button">
-                <span class="mdi mdi-account-outline"></span>
-                <p>Login</p>
-            </a>
+            {% if session["logged_in"] %}
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-account"></span>
+                    <p>Logout</p>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
+                    <p>Login</p>
+                </a>
+            {% endif %}
         </div>
     </div>
     <div class="content">
         <h1>Tic Tac Toe</h1>
         <p>Spiele Tic Tac Toe online gegen deine Freunde und messt euch in einem globalen Leaderboard!</p>
-        <a href="lobby" class="icon-text-button">
-            <span class="mdi mdi-controller"></span>
-            <p>Jetzt Spielen!</p>
-        </a>
+        {% if session["logged_in"] %}
+            <a href="lobby" class="icon-text-button">
+                <span class="mdi mdi-controller"></span>
+                <p>Jetzt Spielen!</p>
+            </a>
+        {% else %}
+            <a href="register" class="icon-text-button">
+                <span class="mdi mdi-account"></span>
+                <p>Jetzt Registrieren!</p>
+            </a>
+        {% endif %}
     </div>
 </body>
 </html>

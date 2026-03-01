@@ -40,8 +40,15 @@
                     <span class="mdi mdi-plus"></span>
                     <p>Account erstellen</p>
                 </button>
+                {% if username_taken %}
+                    <p class="error-message">Dieser Benutzername ist leider schon vergeben</p>
+                {% endif %}
+                {% if field_empty %}
+                    <p class="error-message">Alle Felder müssen ausgefüllt werden!</p>
+                {% endif %}
             </form>
         </div>
+        <p>Du hast schon einen Account? Dann melde dich <a href="login">hier</a> an!</p>
     </div>
 </body>
 </html>
