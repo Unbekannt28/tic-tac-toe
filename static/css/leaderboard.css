@@ -1,0 +1,37 @@
+table {
+    border-spacing: 0 1em;
+    font-size: 14pt;
+    width: 100%;
+}
+
+td {
+    padding: 1em 0.5em;
+    text-align: center;
+    background: var(--background_color_secondary);
+}
+
+.first-td {
+    border-radius: 7px 0 0 7px;
+}
+
+.last-td {
+    border-radius: 0 7px 7px 0;
+}
+
+.entry {
+    background: none;
+}
+
+.highlight td {
+    background: var(--main_color_hightlight);
+    border-top: 2px solid var(--main_color);
+    border-bottom: 2px solid var(--main_color);
+}
+
+.highlight .first-td {
+    border-left: 2px solid var(--main_color);
+}
+
+.highlight .last-td {
+    border-right: 2px solid var(--main_color);
+}

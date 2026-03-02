@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"><!--Material Design Icons-->
+    <link rel="stylesheet" href="css/leaderboard.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+    <div class="header">
+        <div class="left-section">
+            <a href="/" class="icon-text-button">
+                <span class="mdi mdi-chevron-left"></span>
+                <p>Startseite</p>
+            </a>
+            <a href="leaderboard" class="icon-text-button">
+                <span class="mdi mdi-list-box"></span>
+                <p>Leaderboard</p>
+            </a>
+        </div>
+        <div class="right-section">
+            {% if session["logged_in"] %}
+                <div class="username-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="username-display">{{session["username"]}}</p>
+                </div>
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-logout"></span>
+                    <p>Logout</p>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
+                    <p>Login</p>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="content">
+        <h1>Leaderboard</h1>
+        <p>Das ist die globale Bestenliste. Hier kannst du sehen, wer die meisten Spiele gewonnen hat und somit den Besten Score bekommt!</p>
+        <table>
+            <tr>
+                <th>Platz</th>
+                <th>Name</th>
+                <th>Gewonnen</th>
+                <th>Verloren</th>
+                <th>Partien</th>
+                <th>Score</th>
+            </tr>
+            {% for user in users %}
+                {% if user[0] == session["username"] %}
+                    <tr class="highlight entry">
+                {% else %}
+                    <tr class="entry">
+                {% endif %}
+                        <td class="first-td">{{loop.index}}</td>
+                        <td>{{user[0]}}</td>
+                        <td>{{user[1]}}</td>
+                        <td>{{user[2]}}</td>
+                        <td>{{user[3]}}</td>
+                        <td class="last-td">{{user[4]}}</td>
+                    </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

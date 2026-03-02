@@ -139,5 +139,19 @@ def play():
     fields = [["", "", ""], ["", "", ""], ["", "", ""]]
     return render_template("tictactoe_game.html", columns = fields)
 
+# Leaderboard
+@app.route("/leaderboard")
+def leaderboard():
+    # Database communication
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    response = cur.execute("SELECT name, games_won, games_lost, games_played, (games_played * 10 + games_won * 5 - games_lost * 5) AS score FROM users ORDER BY score DESC")
+    data = response.fetchall()
+    con.close()
+
+    print(data)
+
+    return render_template("leaderboard.html", users=data)
+
 if __name__ == "__main__":
     app.run(debug=True)
