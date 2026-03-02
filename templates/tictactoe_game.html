@@ -1,32 +1,63 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/tictactoe_game.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"><!--Material Design Icons-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/tictactoe_game.css">
 </head>
 <body>
-    <div class="tictactoe-box">
-        {% for rows in columns %}
-           {% for field in rows %}
-            {% if field == "O": %}
-                <button class="tictactoe-fields marked_by_o">
-                    <span>O</span>
-                </button>
-            {% elif field == "X": %}
-                <button class="tictactoe-fields marked_by_x">
-                    <span>X</span>
-                </button>
-            {% else: %}
-                <button class="tictactoe-fields">
-                    <span>&nbsp;</span>
-                </button>
+    <div class="header">
+        <div class="left-section">
+            <a href="/" class="icon-text-button">
+                <span class="mdi mdi-chevron-left"></span>
+                <p>Startseite</p>
+            </a>
+            <a href="leaderboard" class="icon-text-button">
+                <span class="mdi mdi-list-box"></span>
+                <p>Leaderboard</p>
+            </a>
+        </div>
+        <div class="right-section">
+            {% if session["logged_in"] %}
+                <div class="username-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="username-display">{{session["username"]}}</p>
+                </div>
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-logout"></span>
+                    <p>Logout</p>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
+                    <p>Login</p>
+                </a>
             {% endif %}
-           {%endfor%}
-        {%endfor%}
-
+        </div>
+    </div>
+    <div class="content">
+        <div class="tictactoe-box">
+            {% for rows in columns %}
+                {% for field in rows %}
+                    {% if field == "O": %}
+                        <button class="tictactoe-fields marked_by_o">
+                            <span>O</span>
+                        </button>
+                    {% elif field == "X": %}
+                        <button class="tictactoe-fields marked_by_x">
+                            <span>X</span>
+                        </button>
+                    {% else: %}
+                        <button class="tictactoe-fields">
+                            <span>&nbsp;</span>
+                        </button>
+                    {% endif %}
+                {%endfor%}
+            {%endfor%}
+        </div>
     </div>
 </body>
 </html>
