@@ -1,3 +1,11 @@
 .register-button-section {
     display: flex;
 }
+
+.no-games-section {
+    display: flex;
+    justify-content: center;
+    color: var(--gray);
+    font-weight: bold;
+    padding: 2em;
+}

@@ -21,9 +21,9 @@
         </div>
         <div class="right-section">
             {% if session["logged_in"] %}
-                <div class="username-display">
+                <div class="icon-text-display">
                     <span class="mdi mdi-account"></span>
-                    <p class="username-display">{{session["username"]}}</p>
+                    <p class="icon-text-display">{{session["username"]}}</p>
                 </div>
                 <a href="login/end_session" class="icon-text-button">
                     <span class="mdi mdi-logout"></span>
@@ -51,7 +51,7 @@
                     <span class="mdi mdi-login"></span>
                     <p>Login</p>
                 </button>
-                {% if wrong_credentials %}
+                {% if message == "wrong_credentials" %}
                     <p class="error-message">Falscher Benutzername oder falsches Passwort</p>
                 {% endif %}
             </form>

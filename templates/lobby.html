@@ -22,9 +22,9 @@
         </div>
         <div class="right-section">
             {% if session["logged_in"] %}
-                <div class="username-display">
+                <div class="icon-text-display">
                     <span class="mdi mdi-account"></span>
-                    <p class="username-display">{{session["username"]}}</p>
+                    <p class="icon-text-display">{{session["username"]}}</p>
                 </div>
                 <a href="login/end_session" class="icon-text-button">
                     <span class="mdi mdi-logout"></span>
@@ -59,17 +59,87 @@
                         <span class="mdi mdi-plus"></span>
                         <p>Spiel Erstellen</p>
                     </button>
+                    {% if message == "invalid_opponent" %}
+                        <p class="error-message">Dein Gegner konnte nicht gefunden werden! Gebe einen gültigen Benutzernamen an.</p>
+                    {% endif %}
+                    {% if message == "field_empty" %}
+                        <p class="error-message">Alle Felder müssen ausgefüllt werden!</p>
+                    {% endif %}
+                    {% if message == "opponent_is_user" %}
+                        <p class="error-message">Du kannst kein Spiel gegen dich selber starten! Wäre doch langweilig, wenn du immer gewinnst :)</p>
+                    {% endif %}
+                    {% if message == "game_created" %}
+                        <p class="success-message">Spiel wurde erfolgreich erstellt! Es ist nun unten bei den offenen Spielen zu sehen.</p>
+                    {% endif %}
                 </form>
             </div>
             <hr>
             <h1>Offene Spiele</h1>
             <p>An dieser Stelle werden alle ausstehenden bzw. noch nicht zu Ende gespielten Spiele angezeigt</p>
             <div class="open-games">
+                {% for game in games %}
+                    {% if not game[1] %}
+                        <div class="entry">
+                            <h2 class="entry-first-heading">Spiel vom {{game[2]}}</h2>
+                            <h3>Spieler 1 - Team X</h3>
+                            <div class="icon-text-display">
+                                <span class="mdi mdi-account"></span>
+                                <p class="icon-text-display">{{game[3]}}{% if game[3] == session["username"] %} (Du){% endif %}</p>
+                            </div>
+                            <h3>Spieler 2 - Team O</h3>
+                            <div class="icon-text-display">
+                                <span class="mdi mdi-account"></span>
+                                <p class="icon-text-display">{{game[4]}}{% if game[4] == session["username"] %} (Du){% endif %}</p>
+                            </div>
+                            <form action="/play" method="post">
+                                <input type="hidden" name="game-id" value="{{game[0]}}">
+                                <button class="icon-text-button" type="submit">
+                                    <span class="mdi mdi-controller"></span>
+                                    <p>Spielen</p>
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if no_open_games %}
+                    <div class="no-games-section">
+                        <p>Du hast zurzeit keine offenen Spiele. Erstelle oben eins, um zu spielen!</p>
+                    </div>
+                {% endif %}
             </div>
             <hr>
             <h1>Gespielte Spiele</h1>
             <p>Deine vergangenen Spiele kannst du dir hier ansehen</p>
             <div class="played-games">
+                {% for game in games %}
+                    {% if game[1] %}
+                        <div class="entry">
+                            <h2 class="entry-first-heading">Spiel vom {{game[2]}}</h2>
+                            <h3>Spieler 1 - Team X</h3>
+                            <div class="icon-text-display">
+                                <span class="mdi mdi-account"></span>
+                                <p class="icon-text-display">{{game[3]}}{% if game[3] == session["username"] %} (Du){% endif %}</p>
+                            </div>
+                            <h3>Spieler 2 - Team O</h3>
+                            <div class="icon-text-display">
+                                <span class="mdi mdi-account"></span>
+                                <p class="icon-text-display">{{game[4]}}{% if game[4] == session["username"] %} (Du){% endif %}</p>
+                            </div>
+                            <form action="/replay" method="post">
+                                <input type="hidden" name="game-id" value="{{game[0]}}">
+                                <button class="icon-text-button" type="submit">
+                                    <span class="mdi mdi-eye"></span>
+                                    <p>Ansehen</p>
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if no_played_games %}
+                    <div class="no-games-section">
+                        <p>Du hast noch keine gespielten Spiele. Beende ein offenes Spiel, um das Ergebnis hier zu sehen!</p>
+                    </div>
+                {% endif %}
             </div>
         {% else %}
             <h1>Anmeldung erforderlich</h1>
@@ -81,6 +151,9 @@
                     <p>Jetzt Registrieren!</p>
                 </a>
             </div>
+            {% if message == "not_logged_in" %}
+                <p class="error-message">Du warst beim Spiel erstellen nicht eingeloggt! Melde dich zuerst an.</p>
+            {% endif %}
         {% endif %}
     </div>
 </body>

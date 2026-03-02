@@ -8,6 +8,8 @@
     --o_color: #BFB1DF;
     --x_color: #FAC6A0;
     --error_message: red;
+    --success_message: #00c100;
+    --gray: gray;
 }
 
 body{
@@ -24,6 +26,11 @@ h2 {
     margin-top: 2em;
     margin-bottom: 0.3em;
     font-size: 14pt;
+}
+
+h3 {
+    font-size: 13pt;
+    margin-bottom: 0.3em;
 }
 
 p {
@@ -108,15 +115,21 @@ input[type="text"], input[type="password"] {
     margin-bottom: 0;
 }
 
-.username-display {
+.success-message {
+    color: var(--success_message);
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
+.icon-text-display {
     display: flex;
     align-items: center;
 }
 
-.username-display span {
+.icon-text-display span {
     font-size: 18pt;
 }
-.username-display p {
+.icon-text-display p {
     font-size: 14pt;
     margin: 0;
 }

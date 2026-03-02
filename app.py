@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, session
 from werkzeug import security
 import sqlite3
+from time import time
+from datetime import datetime
 
 # connect to database
 con = sqlite3.connect("database.db")
@@ -40,16 +42,9 @@ def main():
 # Register
 @app.route("/register")
 def register():
-    # Check if there is an error message
-    username_taken = False
-    field_empty = False
     message = request.args.get("message")
-    if message == "username_taken":
-        username_taken = True
-    elif message == "field_empty":
-        field_empty = True
 
-    return render_template("register.html", username_taken=username_taken, field_empty=field_empty)
+    return render_template("register.html", message=message)
 
 @app.route("/register/create_user", methods=["POST"])
 def create_user():
@@ -86,13 +81,9 @@ def create_user():
 # Login / Logout
 @app.route("/login")
 def login():
-    # Check if there is an error message
-    wrong_credentials = False
     message = request.args.get("message")
-    if message == "wrong_credentials":
-        wrong_credentials = True
 
-    return render_template("login.html", wrong_credentials=wrong_credentials)
+    return render_template("login.html", message=message)
 
 @app.route("/login/start_session", methods=["POST"])
 def start_session():
@@ -127,11 +118,77 @@ def end_session():
 # Game Lobby
 @app.route("/lobby")
 def lobby():
-    return render_template("lobby.html")
+    message = request.args.get("message")
+    data = None
+    no_open_games = True
+    no_played_games = True
+
+    # Load games of user, if logged in
+    if session["logged_in"]:
+        # Database communication
+        con = sqlite3.connect("database.db")
+        cur = con.cursor()
+        response = cur.execute("SELECT games.id, is_over, date, user1.name, user2.name, winner FROM games, users AS user1, users AS user2 WHERE (player_1=? OR player_2=?) AND user1.id=games.player_1 AND user2.id=games.player_2", (session["user_id"], session["user_id"]))
+        data = response.fetchall()
+        con.close()
+
+        for i, row in enumerate(data):
+             # Convert Timestamp to real date
+            row = list(row)
+            row[2] = datetime.fromtimestamp(row[2]).strftime("%d.%m.%Y %H:%M") # dd.mm.yyy HH:MM
+            data[i] = tuple(row)
+
+            # Check if there are no open games or no played games for display later
+            if row[1]:
+                no_played_games = False
+            else:
+                no_open_games = False
+
+
+    return render_template("lobby.html", message=message, games=data, no_open_games=no_open_games, no_played_games=no_played_games)
 
 @app.route("/lobby/create_game", methods=["POST"])
 def create_game():
     opponent = request.form.get("opponent")
+    own_team = request.form.get("own-team")
+
+    # Check if opponent or own_team is empty
+    if opponent == "" or own_team == None:
+        return redirect("/lobby?message=field_empty")
+    
+    # Check if user is logged in
+    if not session["logged_in"]:
+        return redirect("/lobby?message=not_logged_in")
+
+    # Database communication
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    response = cur.execute("SELECT id FROM users WHERE name=?", (opponent,))
+    data = response.fetchone()
+
+    # Check if opponent exists
+    if data == None:
+        return redirect("/lobby?message=invalid_opponent")
+    
+    # Check if opponent is not the user
+    if data[0] == session["user_id"]:
+        return redirect("/lobby?message=opponent_is_user")
+
+    if own_team == "1":
+        player_1 = session["user_id"]
+        player_2 = data[0]
+    else:
+        player_1 = data[0]
+        player_2 = session["user_id"]
+    
+    timestamp = time()
+
+    # Database communication
+    cur.execute("INSERT INTO games (date, player_1, player_2) VALUES (?, ?, ?)", (timestamp, player_1, player_2))
+    con.commit()
+    con.close()
+
+    return redirect("/lobby?message=game_created")
 
 @app.route("/play")
 def play():
