@@ -187,6 +187,16 @@ def create_game():
 
     return redirect("/lobby?message=game_created")
 
+def could_be_valid_game_id(game_id) -> bool:
+    if game_id is None:
+        return False 
+    try:
+        _ = int(game_id)
+    except:
+        return False
+    else:
+        return True
+
 @app.route("/play", methods=['POST', 'GET'])
 def play():
     message = request.args.get("message")
@@ -202,14 +212,10 @@ def play():
         session["game_id"] = game_id
 
     # Check if game_id is valid 
-    if session.get("game_id") is None:
-        return redirect("/lobby?message=no_valid_game_id")    
-    try:
-        _ = int(session.get("game_id"))
-    except:
+    if not could_be_valid_game_id(session.get("game_id")):
         session["game_id"] = None
         return redirect("/lobby?message=no_valid_game_id")
-        
+
     con = sqlite3.connect("database.db")
     cur = con.cursor()
     query = "SELECT * FROM games WHERE id = ?"
@@ -247,12 +253,7 @@ def move():
     game_id = session.get("game_id")
 
     # Check if game_id is valid 
-    if game_id is None:
-        return redirect("/lobby?message=no_valid_game_id")
-
-    try:
-        _ = int(session.get("game_id"))
-    except:
+    if not could_be_valid_game_id(game_id):
         session["game_id"] = None
         return redirect("/lobby?message=no_valid_game_id")
 
@@ -265,6 +266,7 @@ def move():
     
     #Checks if the game exists
     if data is None:
+        session["game_id"] = None
         return redirect("/lobby?message=game_dose_not_exist")
 
     #TODO: Add proper Win/ loss page!
@@ -278,6 +280,7 @@ def move():
     if not data[4] == session["user_id"]:
         is_x = True
     if is_x is None:
+        session["game_id"] = None
         return redirect("/lobby?message=you_are_not_part_of_this_game")
 
     num_turns = 0
