@@ -201,6 +201,23 @@ def play():
     if not game_id == None:
         session["game_id"] = game_id
 
+    # Check if game_id is valid 
+    if session.get("game_id") is None:
+        return redirect("/lobby?message=no_valid_game_id")    
+    try:
+        _ = int(session.get("game_id"))
+    except:
+        session["game_id"] = None
+        return redirect("/lobby?message=no_valid_game_id")
+        
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    query = "SELECT * FROM games WHERE id = ?"
+    query = "SELECT game, turn, position_x, position_y FROM moves WHERE game = ?" 
+    response = cur.execute(query, session["game_id"])
+    for data in response:
+        fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
+
     return render_template("tictactoe_game.html", message=message, fields = fields)
 
 @app.route("/play/move", methods=["POST"])
@@ -272,11 +289,17 @@ def move():
     for data in response:
         if data[1] == x and data[2] == y:
             return redirect("/play?message=field_already_taken")
-            num_turns += 1
+        num_turns += 1
 
     #Check if it is this players turn
     if is_x == (not num_turns % 2 == 0):
         return redirect("/play?message=not_your_turn")
+
+    #Adds new turn to the database
+    query = "INSERT INTO moves (game, turn, player, position_x, position_y) VALUES (?, ?, ?, ?, ?)"
+    cur.execute(query, (game_id, num_turns, session["user_id"], x, y))
+    con.commit()
+    con.close()
 
     return redirect("/play?message=valid_move")
 
