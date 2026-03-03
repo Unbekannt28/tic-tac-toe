@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, Response
 from werkzeug import security
 import sqlite3
 from time import time
@@ -197,6 +197,7 @@ def could_be_valid_game_id(game_id) -> bool:
     else:
         return True
 
+# Play Game
 @app.route("/play", methods=['POST', 'GET'])
 def play():
     message = request.args.get("message")
@@ -220,8 +221,7 @@ def play():
     cur = con.cursor()
     query = "SELECT game, turn, position_x, position_y FROM moves WHERE game = ?" 
     response = cur.execute(query, [session["game_id"]])
-    for data in response:
-        print("data")
+    for row_count, data in enumerate(response, 1):
         fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
 
     game_query = "SELECT * FROM games WHERE id = ? "
@@ -230,9 +230,20 @@ def play():
 
     gameover = game_data[1]
 
-    print(gameover)
+    # Check if current turn is the users turn
+    users_turn = False
+    if row_count % 2 == 0 and session["user_id"] == game_data[3]: # even turn number and user is player 1
+        users_turn = True
+    elif row_count % 2 == 1 and session["user_id"] == game_data[4]: # odd turn number and user is player 2
+        users_turn = True
 
-    return render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover)
+    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover))
+
+    # if current turn is not users turn: auto-refresh every 3 seconds
+    if not users_turn and not gameover:
+        http_response.headers["Refresh"] = "3"
+
+    return http_response
 
 @app.route("/play/move", methods=["POST"])
 def move():
@@ -298,7 +309,6 @@ def move():
     #Gets Game field
     fields = [["", "", ""], ["", "", ""], ["", "", ""]]
     for data in response:
-        print("data")
         fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
         num_turns += 1
 
@@ -385,8 +395,6 @@ def leaderboard():
     response = cur.execute("SELECT name, games_won, games_lost, games_played, (games_played * 10 + games_won * 5 - games_lost * 5) AS score FROM users ORDER BY score DESC")
     data = response.fetchall()
     con.close()
-
-    print(data)
 
     return render_template("leaderboard.html", users=data)
 
