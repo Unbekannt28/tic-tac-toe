@@ -34,7 +34,7 @@ body {
 
 .tictactoe-box{
     box-sizing: border-box;
-    height: 80%;
+    height: min(80%, 80cqmin);
     aspect-ratio: 1 / 1;
     display: grid;
     gap: min(3%, 5px);
