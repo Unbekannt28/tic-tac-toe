@@ -255,13 +255,28 @@ def move():
         return redirect("/")
 
     #Checks if player is X and is part of the Game
-    is_X = None
+    is_x = None
     if not data[3] == session["user_id"]:
-        is_X = True
+        is_x = False
     if not data[4] == session["user_id"]:
-        is_X = False
-    if is_X is None:
+        is_x = True
+    if is_x is None:
         return redirect("/lobby?message=you_are_not_part_of_this_game")
+
+    num_turns = 0
+
+    query = "SELECT game, position_x, position_y FROM moves WHERE game = ?" 
+    response = cur.execute(query, game_id)
+    
+    #Checks if the the target field if untaken
+    for data in response:
+        if data[1] == x and data[2] == y:
+            return redirect("/play?message=field_already_taken")
+            num_turns += 1
+
+    #Check if it is this players turn
+    if is_x == (not num_turns % 2 == 0):
+        return redirect("/play?message=not_your_turn")
 
     return redirect("/play?message=valid_move")
 
