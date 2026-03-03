@@ -22,7 +22,7 @@ body {
     color: red;
     background-color: var(--background_color_secondary);
     border-radius: 20px;
-    height: 5%;
+    height: min(5%, 5cqmin);
     aspect-ratio: 16/1;
 }
 
