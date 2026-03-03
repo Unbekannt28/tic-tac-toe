@@ -89,25 +89,36 @@
         </div>
     </div>
     <div class="content">
-        <div class="tictactoe-box">
-            {% for rows in columns %}
-                {% for field in rows %}
-                    {% if field == "O": %}
-                        <button class="tictactoe-fields marked_by_o">
+        <form class="tictactoe-box" action="play/move" method="post">
+            <input type="hidden" name="game-id" value="{{game_id}}">
+            {% for x in range(3) %}
+                {% for y in range(3) %}
+                    {% if fields[x][y] == "O": %}
+                        <div class="tictactoe-fields marked_by_o">
                             <span>O</span>
-                        </button>
-                    {% elif field == "X": %}
-                        <button class="tictactoe-fields marked_by_x">
+                        </div>
+                    {% elif fields[x][y] == "X": %}
+                        <div class="tictactoe-fields marked_by_x">
                             <span>X</span>
-                        </button>
+                        </div>
                     {% else: %}
-                        <button class="tictactoe-fields">
+                        <button class="tictactoe-fields"
+                                type="submit"
+                                value="{{x}}{{y}}"
+                                name="field">
                             <span>&nbsp;</span>
                         </button>
                     {% endif %}
                 {%endfor%}
             {%endfor%}
-        </div>
+        </form>
+        {% if not (message == "valid_move" or message == None): %}
+            <div class="err_box">
+                <span>
+                    Error: {{message}}
+                </span>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

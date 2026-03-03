@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug import security
 import sqlite3
 from time import time
@@ -170,10 +170,7 @@ def create_game():
     if data == None:
         return redirect("/lobby?message=invalid_opponent")
     
-    # Check if opponent is not the user
-    if data[0] == session["user_id"]:
-        return redirect("/lobby?message=opponent_is_user")
-
+    # Check if opponent is not the usersession
     if own_team == "1":
         player_1 = session["user_id"]
         player_2 = data[0]
@@ -190,11 +187,84 @@ def create_game():
 
     return redirect("/lobby?message=game_created")
 
-@app.route("/play")
+@app.route("/play", methods=['POST', 'GET'])
 def play():
-    #Will be fild with X and Os through the game.
+    message = request.args.get("message")
+    game_id = request.form.get("game-id")
+
     fields = [["", "", ""], ["", "", ""], ["", "", ""]]
-    return render_template("tictactoe_game.html", columns = fields)
+    #Check if player is looged in
+    if session.get("logged_in") == None or not session.get("logged_in"):
+        message = "not_logged_in"
+        return render_template("tictactoe_game.html", message=message, fields = fields)
+
+    if not game_id == None:
+        session["game_id"] = game_id
+
+    return render_template("tictactoe_game.html", message=message, fields = fields)
+
+@app.route("/play/move", methods=["POST"])
+def move():
+    field = request.form.get("field")
+
+    # Check if field has two digits
+    if len(field) != 2:
+        return redirect("/play?message=invalid_move_length")
+
+    #Check if field contains two ints
+    try:
+        x = int(field[0])
+        y = int(field[1])
+    except: 
+        return redirect("/play?message=invalid_move_not_integers")
+
+    #Check if field is in bounds
+    if x > 2 or y > 2 or x < 0 or y < 0:
+        return redirect("/play?message=invalid_move_out_of_bounds")
+
+    #Check if player is looged in
+    if session.get("logged_in") == None or not session.get("logged_in"):
+        return redirect("/play?message=not_logged_in")
+
+
+    game_id = session.get("game_id")
+
+    # Check if game_id is valid 
+    if game_id is None:
+        return redirect("/lobby?message=no_valid_game_id")
+
+    try:
+        _ = int(session.get("game_id"))
+    except:
+        session["game_id"] = None
+        return redirect("/lobby?message=no_valid_game_id")
+
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+
+    query = "SELECT * FROM games WHERE id = ?"
+    response = cur.execute(query, game_id)
+    data = response.fetchone()
+    
+    #Checks if the game exists
+    if data is None:
+        return redirect("/lobby?message=game_dose_not_exist")
+
+    #TODO: Add proper Win/ loss page!
+    if data[1]:
+        return redirect("/")
+
+    #Checks if player is X and is part of the Game
+    is_X = None
+    if not data[3] == session["user_id"]:
+        is_X = True
+    if not data[4] == session["user_id"]:
+        is_X = False
+    if is_X is None:
+        return redirect("/lobby?message=you_are_not_part_of_this_game")
+
+    return redirect("/play?message=valid_move")
+
 
 # Leaderboard
 @app.route("/leaderboard")
