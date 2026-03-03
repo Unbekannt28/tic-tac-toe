@@ -204,6 +204,12 @@
             {% if message == "not_logged_in" %}
                 <p class="error-message">Du warst beim Spiel erstellen nicht eingeloggt! Melde dich zuerst an.</p>
             {% endif %}
+            {% if message == "no_valid_game_id" %}
+                <p class="error-message">Du bist in einem Spiel ohne gültige Id gelandet! Erstelle zuerst ein Spiel und trete ihm dann bei.</p>
+            {% endif %}
+            {% if message == "game_dose_not_exist" %}
+                <p class="error-message">Du bist in einem Spiel, das nicht existiert gelandet! Erstelle zuerst ein Spiel und trete ihm dann bei.</p>
+            {% endif %}
         {% endif %}
     </div>
 </body>
