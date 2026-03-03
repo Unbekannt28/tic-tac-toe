@@ -124,7 +124,7 @@ def lobby():
     no_played_games = True
 
     # Load games of user, if logged in
-    if session["logged_in"]:
+    if session.get("logged_in"):
         # Database communication
         con = sqlite3.connect("database.db")
         cur = con.cursor()
@@ -157,7 +157,7 @@ def create_game():
         return redirect("/lobby?message=field_empty")
     
     # Check if user is logged in
-    if not session["logged_in"]:
+    if not session.get("logged_in"):
         return redirect("/lobby?message=not_logged_in")
 
     # Database communication
