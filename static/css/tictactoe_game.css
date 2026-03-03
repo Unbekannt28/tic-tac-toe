@@ -33,6 +33,7 @@ body {
 }
 
 .tictactoe-box{
+    box-sizing: border-box;
     height: 80%;
     aspect-ratio: 1 / 1;
     display: grid;
