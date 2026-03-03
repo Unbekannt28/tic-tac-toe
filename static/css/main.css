@@ -133,3 +133,68 @@ input[type="text"], input[type="password"] {
     font-size: 14pt;
     margin: 0;
 }
+
+/* Responsive Styling */
+
+.header-mobile {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: none;
+}
+
+.dropdown-mobile {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background: var(--background_color_secondary);
+    box-shadow: rgba(0, 0, 0, 0.5) 0 0 10px;
+    display: none;
+}
+
+.mobile-icon-button {
+    font-size: 52pt;
+    border: none;
+    background: transparent;
+}
+
+.status-mobile {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.controls-mobile {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+#mobile-th {
+    display: none;
+}
+
+@media only screen and (max-width: 700px) {
+    #header {
+        display: none;
+    }
+
+    #header-mobile {
+        display: flex;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #mobile-th {
+        display: table-row;
+    }
+
+    #standard-th {
+        display: none;
+    }
+}

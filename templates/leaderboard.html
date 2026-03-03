@@ -4,12 +4,62 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"><!--Material Design Icons-->
     <link rel="stylesheet" href="css/leaderboard.css">
+    <script src="js/main.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    <div class="header">
+    <div class="dropdown-mobile" id="dropdown-mobile">
+        <div class="status-mobile">
+            <button onclick="closeDropdown()" class="mobile-icon-button">
+                <span class="mdi mdi-close"></span>
+            </button>
+            {% if session["logged_in"] %}
+                <div class="icon-text-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="icon-text-display">{{session["username"]}}</p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="controls-mobile">
+            <a href="/" class="icon-text-button">
+                <span class="mdi mdi-chevron-left"></span>
+                <p>Startseite</p>
+            </a>
+            <a href="leaderboard" class="icon-text-button">
+                <span class="mdi mdi-list-box"></span>
+                <p>Leaderboard</p>
+            </a>
+            {% if session["logged_in"] %}
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-logout"></span>
+                    <p>Logout</p>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
+                    <p>Login</p>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="header header-mobile" id="header-mobile">
+        <div class="left-section">
+            <button onclick="openDropdown()" class="mobile-icon-button">
+                <span class="mdi mdi-menu"></span>
+            </button>
+        </div>
+        <div class="right-section">
+            {% if session["logged_in"] %}
+                <div class="icon-text-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="icon-text-display">{{session["username"]}}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="header" id="header">
         <div class="left-section">
             <a href="/" class="icon-text-button">
                 <span class="mdi mdi-chevron-left"></span>
@@ -42,13 +92,21 @@
         <h1>Leaderboard</h1>
         <p>Das ist die globale Bestenliste. Hier kannst du sehen, wer die meisten Spiele gewonnen hat und somit den Besten Score bekommt!</p>
         <table>
-            <tr>
+            <tr id="standard-th">
                 <th>Platz</th>
                 <th>Name</th>
                 <th>Gewonnen</th>
                 <th>Verloren</th>
                 <th>Partien</th>
                 <th>Score</th>
+            </tr>
+            <tr id="mobile-th">
+                <th>#</th>
+                <th>Name</th>
+                <th><span class="mdi mdi-trophy"></span></th>
+                <th><span class="mdi mdi-close"></span></th>
+                <th><span class="mdi mdi-controller"></span></th>
+                <th><span class="mdi mdi-counter"></span></th>
             </tr>
             {% for user in users %}
                 {% if user[0] == session["username"] %}
