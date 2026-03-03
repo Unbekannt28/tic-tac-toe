@@ -210,6 +210,9 @@
             {% if message == "game_dose_not_exist" %}
                 <p class="error-message">Du bist in einem Spiel, das nicht existiert gelandet! Erstelle zuerst ein Spiel und trete ihm dann bei.</p>
             {% endif %}
+            {% if message == "you_are_not_part_of_this_game" %}
+                <p class="error-message">Du bist kein Spieler in dieser Partie!.</p>
+            {% endif %}
         {% endif %}
     </div>
 </body>
