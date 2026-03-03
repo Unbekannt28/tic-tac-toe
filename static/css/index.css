@@ -19,7 +19,7 @@ h1 {
     font-size: 50pt;
     background: linear-gradient(90deg,rgba(255, 161, 170, 1) 0%, rgba(186, 112, 204, 1) 100%);
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .content > p {

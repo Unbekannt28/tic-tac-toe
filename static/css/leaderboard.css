@@ -35,3 +35,13 @@ td {
 .highlight .last-td {
     border-right: 2px solid var(--main_color);
 }
+
+@media only screen and (max-width: 700px) {
+    #mobile-th {
+        display: table-row;
+    }
+
+    #standard-th {
+        display: none;
+    }
+}
