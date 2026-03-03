@@ -102,12 +102,18 @@
                             <span>X</span>
                         </div>
                     {% else: %}
-                        <button class="tictactoe-fields"
-                                type="submit"
-                                value="{{x}}{{y}}"
-                                name="field">
-                            <span>&nbsp;</span>
-                        </button>
+                        {% if gameover == 1: %}
+                            <div class="tictactoe-fields marked_by_x">
+                                <span>&nbsp;</span>
+                            </div> 
+                        {% else: %}
+                            <button class="tictactoe-fields"
+                                    type="submit"
+                                    value="{{x}}{{y}}"
+                                    name="field">
+                                <span>&nbsp;</span>
+                            </button>
+                        {% endif %}
                     {% endif %}
                 {%endfor%}
             {%endfor%}

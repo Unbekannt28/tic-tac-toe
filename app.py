@@ -218,13 +218,21 @@ def play():
 
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-    query = "SELECT * FROM games WHERE id = ?"
     query = "SELECT game, turn, position_x, position_y FROM moves WHERE game = ?" 
-    response = cur.execute(query, session["game_id"])
+    response = cur.execute(query, [session["game_id"]])
     for data in response:
+        print("data")
         fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
 
-    return render_template("tictactoe_game.html", message=message, fields = fields)
+    game_query = "SELECT * FROM games WHERE id = ? "
+    game_response = cur.execute(game_query, [session["game_id"]])
+    game_data = game_response.fetchone()
+
+    gameover = game_data[1]
+
+    print(gameover)
+
+    return render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover)
 
 @app.route("/play/move", methods=["POST"])
 def move():
@@ -261,17 +269,13 @@ def move():
     cur = con.cursor()
 
     query = "SELECT * FROM games WHERE id = ?"
-    response = cur.execute(query, game_id)
+    response = cur.execute(query, [game_id])
     data = response.fetchone()
     
     #Checks if the game exists
     if data is None:
         session["game_id"] = None
         return redirect("/lobby?message=game_dose_not_exist")
-
-    #TODO: Add proper Win/ loss page!
-    if data[1]:
-        return redirect("/")
 
     #Checks if player is X and is part of the Game
     is_x = None
@@ -283,24 +287,89 @@ def move():
         session["game_id"] = None
         return redirect("/lobby?message=you_are_not_part_of_this_game")
 
+    if data[1]:
+        return redirect("/play?message=game_over")
+
+    query = "SELECT game, turn, position_x, position_y FROM moves WHERE game = ?" 
+    response = cur.execute(query, [game_id])
+
     num_turns = 0
 
-    query = "SELECT game, position_x, position_y FROM moves WHERE game = ?" 
-    response = cur.execute(query, game_id)
-    
-    #Checks if the the target field if untaken
+    #Gets Game field
+    fields = [["", "", ""], ["", "", ""], ["", "", ""]]
     for data in response:
-        if data[1] == x and data[2] == y:
-            return redirect("/play?message=field_already_taken")
+        print("data")
+        fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
         num_turns += 1
 
     #Check if it is this players turn
     if is_x == (not num_turns % 2 == 0):
         return redirect("/play?message=not_your_turn")
 
+    #Checks if the the target field is untaken
+    if not fields[x][y] == "":
+        return redirect("/play?message=field_already_taken")
+
+
     #Adds new turn to the database
     query = "INSERT INTO moves (game, turn, player, position_x, position_y) VALUES (?, ?, ?, ?, ?)"
     cur.execute(query, (game_id, num_turns, session["user_id"], x, y))
+    
+    win_query = "UPDATE games SET is_over = true, winner = ? WHERE id = ?"
+
+    #Ends Game if last turn reached 
+    if num_turns == 8:
+        query = "UPDATE games SET is_over = true WHERE id = ?"
+        cur.execute(query, (game_id,))
+
+    fields[x][y] = "X" if num_turns % 2 == 0 else "O"
+
+    for x in range(3):
+        count = 0
+        for y in range(3):
+            if fields[x][y] == "X":
+                count += 1
+            elif fields[x][y] == "O":
+                count -=1
+        if count == 3 and is_x:
+            cur.execute(win_query, (session["user_id"], game_id))
+        if count == -3 and not is_x:
+            cur.execute(win_query, (session["user_id"], game_id))
+
+    for y in range(3):
+        count = 0
+        for x in range(3):
+            if fields[x][y] == "X":
+                count += 1
+            elif fields[x][y] == "O":
+                count -=1
+        if count == 3 and is_x:
+            cur.execute(win_query, (session["user_id"], game_id))
+        if count == -3 and not is_x:
+            cur.execute(win_query, (session["user_id"], game_id))
+    
+    count = 0
+    for i in range(3):
+        if fields[i][i] == "X":
+            count += 1
+        elif fields[i][i] == "O":
+            count -=1
+    if count == 3 and is_x:
+        cur.execute(win_query, (session["user_id"], game_id))
+    if count == -3 and not is_x:
+        cur.execute(win_query, (session["user_id"], game_id))
+
+    count = 0
+    for i in reversed(range(3)):
+        if fields[i][2 - i] == "X":
+            count += 1
+        elif fields[i][2 - i] == "O":
+            count -=1
+    if count == 3 and is_x:
+        cur.execute(win_query, (session["user_id"], game_id))
+    if count == -3 and not is_x:
+        cur.execute(win_query, (session["user_id"], game_id))
+
     con.commit()
     con.close()
 
