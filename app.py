@@ -290,11 +290,13 @@ def move():
         return redirect("/lobby?message=game_dose_not_exist")
 
     #Checks if player is X and is part of the Game
+    player_1 = data[3]
+    player_2 = data[4]
     is_x = None
-    if not data[3] == session["user_id"]:
-        is_x = False
-    if not data[4] == session["user_id"]:
+    if player_1 == session["user_id"]:
         is_x = True
+    if player_2 == session["user_id"]:
+        is_x = False
     if is_x is None:
         session["game_id"] = None
         return redirect("/lobby?message=you_are_not_part_of_this_game")
@@ -323,18 +325,12 @@ def move():
 
 
     #Adds new turn to the database
-    query = "INSERT INTO moves (game, turn, player, position_x, position_y) VALUES (?, ?, ?, ?, ?)"
-    cur.execute(query, (game_id, num_turns, session["user_id"], x, y))
+    query_new_turn = "INSERT INTO moves (game, turn, player, position_x, position_y) VALUES (?, ?, ?, ?, ?)"
+    cur.execute(query_new_turn, (game_id, num_turns, session["user_id"], x, y))
     
-    win_query = "UPDATE games SET is_over = true, winner = ? WHERE id = ?"
-
-    #Ends Game if last turn reached 
-    if num_turns == 8:
-        query = "UPDATE games SET is_over = true WHERE id = ?"
-        cur.execute(query, (game_id,))
-
+    #Checks if the game is Won 
+    is_game_won = False
     fields[x][y] = "X" if num_turns % 2 == 0 else "O"
-
     for x in range(3):
         count = 0
         for y in range(3):
@@ -343,9 +339,9 @@ def move():
             elif fields[x][y] == "O":
                 count -=1
         if count == 3 and is_x:
-            cur.execute(win_query, (session["user_id"], game_id))
+            is_game_won = True
         if count == -3 and not is_x:
-            cur.execute(win_query, (session["user_id"], game_id))
+            is_game_won = True
 
     for y in range(3):
         count = 0
@@ -355,9 +351,9 @@ def move():
             elif fields[x][y] == "O":
                 count -=1
         if count == 3 and is_x:
-            cur.execute(win_query, (session["user_id"], game_id))
+            is_game_won = True
         if count == -3 and not is_x:
-            cur.execute(win_query, (session["user_id"], game_id))
+            is_game_won = True
     
     count = 0
     for i in range(3):
@@ -366,9 +362,9 @@ def move():
         elif fields[i][i] == "O":
             count -=1
     if count == 3 and is_x:
-        cur.execute(win_query, (session["user_id"], game_id))
+        is_game_won = True
     if count == -3 and not is_x:
-        cur.execute(win_query, (session["user_id"], game_id))
+        is_game_won = True
 
     count = 0
     for i in reversed(range(3)):
@@ -377,9 +373,32 @@ def move():
         elif fields[i][2 - i] == "O":
             count -=1
     if count == 3 and is_x:
-        cur.execute(win_query, (session["user_id"], game_id))
+        is_game_won = True
     if count == -3 and not is_x:
+        is_game_won = True
+
+    if is_game_won:
+        win_query = "UPDATE games SET is_over = true, winner = ? WHERE id = ?"
         cur.execute(win_query, (session["user_id"], game_id))
+
+        winner_query = "UPDATE users SET games_won = games_won + 1, games_played = games_played + 1 WHERE id = ?"
+        cur.execute(winner_query, (session["user_id"],))
+
+        losser_query = "UPDATE users SET games_lost = games_lost + 1, games_played = games_played + 1 WHERE id = ?"
+        if is_x:
+            cur.execute(losser_query, (player_2,))
+        else:
+            cur.execute(losser_query, (player_1,))
+    elif num_turns == 8:
+        #Ends Game if last turn reached and no player won
+        query_gameover = "UPDATE games SET is_over = true WHERE id = ?"
+        cur.execute(query_gameover, (game_id,))
+
+        query_draw = "UPDATE users SET games_played = games_played + 1 WHERE id = ?"
+        cur.execute(query_draw, (player_1,))
+        cur.execute(query_draw, (player_2,)) 
+
+    
 
     con.commit()
     con.close()
