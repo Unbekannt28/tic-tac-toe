@@ -175,7 +175,7 @@
                                 <span class="mdi mdi-account"></span>
                                 <p class="icon-text-display">{{game[4]}}{% if game[4] == session["username"] %} (Du){% endif %}</p>
                             </div>
-                            <form action="/replay" method="post">
+                            <form action="/play" method="post">
                                 <input type="hidden" name="game-id" value="{{game[0]}}">
                                 <button class="icon-text-button" type="submit">
                                     <span class="mdi mdi-eye"></span>
