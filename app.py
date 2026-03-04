@@ -30,6 +30,7 @@ def close_session():
     session["logged_in"] = None
     session["user_id"] = None
     session["username"] = None
+    session["game_id"] = None
 
 
 # Routes
