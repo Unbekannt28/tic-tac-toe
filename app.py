@@ -217,7 +217,7 @@ def play():
         session["game_id"] = game_id
 
     # Check if game_id is valid 
-    if not could_be_valid_game_id(session.get("game_id")):
+    if not could_be_valid_game_id(session.get("game_id") or session.get("game_id") is None):
         session["game_id"] = None
         return redirect("/lobby?message=no_valid_game_id")
 
@@ -242,7 +242,26 @@ def play():
     elif row_count % 2 == 1 and session["user_id"] == game_data[4]: # odd turn number and user is player 2
         users_turn = True
 
-    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover))
+    player_name_1 = ""
+    player_name_2 = ""
+    # Player Names
+    player_id_1 = game_data[3]
+    player_id_2 = game_data[4]
+    query_player = "SELECT name FROM users where id = ?"
+    player_response_1 = cur.execute(query_player, [player_id_1])
+    player_data_1 = player_response_1.fetchone()
+    player_response_2 = cur.execute(query_player, [player_id_2])
+    player_data_2 = player_response_2.fetchone()
+    player_name_1 = player_data_1[0]
+    player_name_2 = player_data_2[0]
+
+    if player_id_1 == session.get("user_id"):
+        player_name_1 = "(Du) " + player_name_1
+    else:
+        player_name_2 = "(Du) " + player_name_2
+
+
+    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover, player_name_1=player_name_1, player_name_2=player_name_2))
 
     # if current turn is not users turn: auto-refresh every 3 seconds
     if not users_turn and not gameover:
