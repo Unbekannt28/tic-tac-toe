@@ -65,10 +65,30 @@ body {
     line-height: 1.2;
 }
 
+.turn_reminder_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-weight: bold;
+    background-color: var(--background_color_secondary);
+    border-radius: 20px;
+    height: min(5%, 5cqmin);
+    aspect-ratio: 16/1;
+
+}
+
+.turn_reminder_box span {
+    font-size: max(2cqmin, calc(2cqh / 1.5)); 
+    font-weight: bold;
+    line-height: 1;
+    box-sizing: border-box;
+}
+
 .err_box {
     display: flex;
     align-items: center;
-    justify-content: center;overflow: hidden;
+    justify-content: center;
     font-weight: bold;
     color: red;
     background-color: var(--background_color_secondary);

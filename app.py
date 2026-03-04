@@ -261,7 +261,13 @@ def play():
         player_name_2 = "(Du) " + player_name_2
 
 
-    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover, player_name_1=player_name_1, player_name_2=player_name_2))
+    #Adds turn reminder
+    turn_reminder = False
+    if users_turn and not gameover:
+        turn_reminder = True
+
+
+    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover, player_name_1=player_name_1, player_name_2=player_name_2, turn_reminder=turn_reminder))
 
     # if current turn is not users turn: auto-refresh every 3 seconds
     if not users_turn and not gameover:

@@ -120,6 +120,13 @@
                 {%endfor%}
             {%endfor%}
         </form>
+        {% if turn_reminder %}
+            <div class="turn_reminder_box">
+                <span>
+                    Du bist am Zug. Klicke auf eines der hellen Felder, um es zu markieren!
+                </span>
+            </div>
+        {% endif %}
         {% if not (message == "valid_move" or message == None): %}
             <div class="err_box">
                 <span>
