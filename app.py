@@ -171,7 +171,10 @@ def create_game():
     if data == None:
         return redirect("/lobby?message=invalid_opponent")
     
-    # Check if opponent is not the usersession
+    # Check if opponent is user
+    if session["user_id"] == data[0]:
+        return redirect("/lobby?message=opponent_is_user")
+
     if own_team == "1":
         player_1 = session["user_id"]
         player_2 = data[0]
