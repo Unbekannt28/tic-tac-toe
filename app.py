@@ -221,6 +221,7 @@ def play():
     cur = con.cursor()
     query = "SELECT game, turn, position_x, position_y FROM moves WHERE game = ?" 
     response = cur.execute(query, [session["game_id"]])
+    row_count = 0
     for row_count, data in enumerate(response, 1):
         fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
 
