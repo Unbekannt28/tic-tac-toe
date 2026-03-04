@@ -14,29 +14,83 @@ body {
     gap: min(3%, 5px);
 }
 
+.player_box {
+    display: flex;
+    flex: 0 1 auto;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    background-color: var(--background_color_secondary);
+    border-radius: 20px;
+    height: min(5%, 5cqmin);
+    aspect-ratio: 16/1;
+    overflow: hidden;
+}
+
+.player_marker_x {
+    font-size: max(3cqmin, calc(3cqh / 1.5)); 
+    font-weight: bolder;
+    color: var(--x_color);
+    padding-left: 2vmin;
+}
+
+.player_marker_o {
+    font-size: max(3cqmin, calc(3cqh / 1.5)); 
+    line-height: 1.2;
+    font-weight: bolder;
+    color: var(--o_color);
+}
+
+.player_name_left, .player_name_right {
+    font-size: max(2cqmin, calc(2cqh / 1.5)); 
+    font-weight: bold;
+    line-height: 1.2;
+    white-space: nowrap;
+    flex: 0 1 42%;
+    max-width: min-content;
+    text-overflow: ellipsis;
+    white-space: nowrap;  
+    overflow: hidden;
+}
+
+.player_name_right {
+    padding-right: 2vmin;
+}
+
+.versus {
+    font-size: max(2cqmin, calc(2cqh / 1.5)); 
+    left: calc(50% - max(2cqmin, calc(2cqh / 1.5)));
+    position: absolute;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
 .err_box {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;overflow: hidden;
     font-weight: bold;
     color: red;
     background-color: var(--background_color_secondary);
     border-radius: 20px;
     height: min(5%, 5cqmin);
     aspect-ratio: 16/1;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .err_box span {
     font-size: max(2cqmin, calc(2cqh / 1.5)); 
     font-weight: bold;
     line-height: 1;
+    box-sizing: border-box;
 }
 
 .tictactoe-box{
     box-sizing: border-box;
     height: min(80%, 80cqmin);
     aspect-ratio: 1 / 1;
-    display: grid;
+    display: grid;overflow: hidden;
     gap: min(3%, 5px);
     grid-template-columns: auto auto auto;
     grid-template-rows: auto auto auto;
@@ -49,7 +103,7 @@ body {
     background-color: var(--main_color);
     color: var(--background_color_secondary);
     font-weight: bolder;
-    border-radius: 5%;
+    border-radius: 5%;overflow: hidden;
     cursor: pointer;
     border-color: transparent;
     box-shadow: none;

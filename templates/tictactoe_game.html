@@ -51,7 +51,7 @@
             </button>
         </div>
         <div class="right-section">
-            {% if session["logged_in"] %}
+            {% if session["logged_in"] %}line-height: 1;
                 <div class="icon-text-display">
                     <span class="mdi mdi-account"></span>
                     <p class="icon-text-display">{{session["username"]}}</p>
@@ -79,16 +79,18 @@
                 <a href="login/end_session" class="icon-text-button">
                     <span class="mdi mdi-logout"></span>
                     <p>Logout</p>
-                </a>
-            {% else %}
-                <a href="login" class="icon-text-button">
-                    <span class="mdi mdi-account-outline"></span>
+                </a>    width: calc(min(5%, 5cqmin) * 16);tline"></span>
                     <p>Login</p>
                 </a>
             {% endif %}
         </div>
     </div>
     <div class="content">
+        <div class ="player_box">
+            <span class="player_name_left"><span class="player_marker_x">X:&nbsp;</span>Test AAAAAAAAAAAAAAAAAA </span>
+            <span class="versus">vs.</span>
+            <span class="player_name_right"><span class="player_marker_o">O:&nbsp;</span>X Tes  AAAAAaAAAAAAAAAAAAAAAAAA</span>
+        </div>  
         <form class="tictactoe-box" action="play/move" method="post">
             <input type="hidden" name="game-id" value="{{game_id}}">
             {% for x in range(3) %}
