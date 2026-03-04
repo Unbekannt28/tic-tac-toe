@@ -144,7 +144,17 @@
         {% if not (message == "valid_move" or message == None): %}
             <div class="err_box">
                 <span>
-                    Error: {{message}}
+                    {% if message == "invalid_move_length" or message == "invalid_move_not_integers" or message == "invalid_move_out_of_bounds" %}
+                        Es wurde ein ungültiger Zug gesendet! Bitte versuche es erneut.
+                    {% elif message == "game_over" %}
+                        Dieses Spiel ist schon beendet!
+                    {% elif message == "not_your_turn" %}
+                        Du hast versucht einen Zug zu machen, obwohl du nicht dran warst!
+                    {% elif message == "field_already_taken" %}
+                        Dieses Feld ist schon belegt.
+                    {% else %}
+                        Ein unbekannter Fehler ist aufgetreten!
+                    {% endif %}
                 </span>
             </div>
         {% endif %}
