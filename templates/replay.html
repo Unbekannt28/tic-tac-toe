@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <link rel="stylesheet" href="css/replay.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/tictactoe_game.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"><!--Material Design Icons-->
+    <script src="js/main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+<div class="dropdown-mobile" id="dropdown-mobile">
+        <div class="status-mobile">
+            <button onclick="closeDropdown()" class="mobile-icon-button">
+                <span class="mdi mdi-close"></span>
+            </button>
+            {% if session["logged_in"] %}
+                <div class="icon-text-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="icon-text-display">{{session["username"]}}</p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="controls-mobile">
+            <a href="/lobby" class="icon-text-button">
+                <span class="mdi mdi-chevron-left"></span>
+                <p>Lobby</p>
+            </a>
+            <a href="leaderboard" class="icon-text-button">
+                <span class="mdi mdi-list-box"></span>
+                <p>Leaderboard</p>
+            </a>
+            {% if session["logged_in"] %}
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-logout"></span>
+                    <p>Logout</p>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
+                    <p>Login</p>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="header header-mobile" id="header-mobile">
+        <div class="left-section">
+            <button onclick="openDropdown()" class="mobile-icon-button">
+                <span class="mdi mdi-menu"></span>
+            </button>
+        </div>
+        <div class="right-section">
+            {% if session["logged_in"] %}
+                <div class="icon-text-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="icon-text-display">{{session["username"]}}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="header" id="header">
+        <div class="left-section">
+            <a href="/lobby" class="icon-text-button">
+                <span class="mdi mdi-chevron-left"></span>
+                <p>Lobby</p>
+            </a>
+            <a href="leaderboard" class="icon-text-button">
+                <span class="mdi mdi-list-box"></span>
+                <p>Leaderboard</p>
+            </a>
+        </div>
+        <div class="right-section">
+            {% if session["logged_in"] %}
+                <div class="icon-text-display">
+                    <span class="mdi mdi-account"></span>
+                    <p class="icon-text-display">{{session["username"]}}</p>
+                </div>
+                <a href="login/end_session" class="icon-text-button">
+                    <span class="mdi mdi-logout"></span>
+                    <p>Logout</p>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
+                    <p>Login</p>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="content">
+        <div class ="player_box">
+            <span class="player_name_left"><span class="player_marker_x">X:&nbsp;</span>{{player_name_1}}</span>
+            <span class="versus">vs.</span>
+            <span class="player_name_right"><span class="player_marker_o">O:&nbsp;</span>{{player_name_2}}</span>
+        </div>  
+        <form class="tictactoe-box" action="play/move" method="post">
+            <input type="hidden" name="game-id" value="{{game_id}}">
+            {% for x in range(3) %}
+                {% for y in range(3) %}
+                    {% if fields[x][y] == "O": %}
+                        <div class="tictactoe-fields marked_by_o">
+                            <span>O</span>
+                        </div>
+                    {% elif fields[x][y] == "X": %}
+                        <div class="tictactoe-fields marked_by_x">
+                            <span>X</span>
+                        </div>
+                    {% else: %}
+                        <div class="tictactoe-fields marked_by_x">
+                            <span>&nbsp;</span>
+                        </div> 
+                    {% endif %}
+                {%endfor%}
+            {%endfor%}
+        </form>
+        <div class="turn_changer_box">
+            <a href="/replay/previous?game-id={{game_id}}&turn={{turn}}" class="icon-text-button">Previous</a>
+            <a href="/replay/next?game-id={{game_id}}&turn={{turn}}" class="icon-text-button">Next</a>
+        </div>
+        {% if gameover and winner is not none: %}
+            <div class="basic_info_box">
+                {% if game_over_state is none: %}
+                    <span>Keiner hat gewonnen, das passiert manchmal. ¯\_( ͡° ͜ʖ ͡°)_/¯</span>
+                {% else: %}
+                    <span>{{winner}} hat gewonnen! ヽ(•‿•)ノ</span>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if not (message == "valid_move" or message == None): %}
+            <div class="err_box">
+                <span>
+                    {% if message == "no_valid_game_id" %}
+                        Es wurde kein gültige game-id angegeben.
+                    {% else %}
+                        Ein unbekannter Fehler ist aufgetreten!
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

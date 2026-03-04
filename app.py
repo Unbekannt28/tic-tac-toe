@@ -211,7 +211,7 @@ def play():
     #Check if player is looged in
     if session.get("logged_in") == None or not session.get("logged_in"):
         message = "not_logged_in"
-        return render_template("tictactoe_game.html", message=message, fields = fields)
+        return render_template("tictactoe_game.html", message=message, fields=fields)
 
     if not game_id == None:
         session["game_id"] = game_id
@@ -458,6 +458,112 @@ def leaderboard():
     con.close()
 
     return render_template("leaderboard.html", users=data)
+
+# Replay (Das Replay system wurde nicht rechzeitig vertig gestelt und gepusht)
+@app.route("/replay")
+def tictactoe_replay():
+    message = request.args.get("message")
+    game_id = request.args.get("game-id")
+    turn = request.args.get("turn")
+
+    if turn is None or not turn.isdigit():
+        turn = 0
+
+    fields = [["", "", ""], ["", "", ""], ["", "", ""]]
+    #Check if the game id is Some
+    if game_id is None:
+        message = "no_valid_game_id"
+        return render_template("replay.html", message=message, fields=fields)
+
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    query = "SELECT game, turn, position_x, position_y FROM moves WHERE game = ? ORDER BY turn ASC" 
+    response = cur.execute(query, [game_id])
+    row_count = 0
+    last_turn = 0
+    for row_count, data in enumerate(response, 1):
+        if not int(turn) < data[1]:
+            fields[int(data[2])][(data[3])] = "X" if data[1] % 2 == 0 else "O"
+        last_turn = data[1]
+
+    game_query = "SELECT * FROM games WHERE id = ? "
+    game_response = cur.execute(game_query, [game_id])
+    game_data = game_response.fetchone()
+
+    #Check if game exists
+    if game_data is None:
+        message = "no_valid_game_id"
+        return render_template("replay.html", message=message, fields=fields)
+
+    gameover = game_data[1]
+
+    winner_id = game_data[5]
+
+    player_name_1 = ""
+    player_name_2 = ""
+    # Player Names
+    player_id_1 = game_data[3]
+    player_id_2 = game_data[4]
+    query_player = "SELECT name FROM users where id = ?"
+    player_response_1 = cur.execute(query_player, [player_id_1])
+    player_data_1 = player_response_1.fetchone()
+    player_response_2 = cur.execute(query_player, [player_id_2])
+    player_data_2 = player_response_2.fetchone()
+    player_name_1 = player_data_1[0]
+    player_name_2 = player_data_2[0]
+
+    winner = None
+
+    if winner_id == player_id_1:
+        winner = player_name_1
+    elif winner_id == player_id_2:
+        winner = player_name_2
+
+    if int(turn) < last_turn:
+        winner = None
+
+
+    return render_template("replay.html", message=message, game_id=game_id, turn=turn, fields = fields, gameover=gameover, player_name_1=player_name_1, player_name_2=player_name_2, winner=winner)
+
+@app.route("/replay/next")
+def replay_next():
+    game_id = request.args.get("game-id")
+    turn = request.args.get("turn")
+
+    if game_id is None or turn is None or not turn.isnumeric():
+        return redirect("/lobby")
+
+    if not turn.isdigit():
+        turn = 0
+
+    turn = int(turn) + 1
+
+    if turn > 8:
+        turn = 8
+
+    new_replay = "/replay?game-id=" + game_id + "&turn=" + str(turn)
+
+    return redirect(new_replay)
+
+@app.route("/replay/previous")
+def replay_previous():
+    game_id = request.args.get("game-id")
+    turn = request.args.get("turn")
+
+    if game_id is None or turn is None:
+        return redirect("/lobby")
+
+    if not turn.isdigit():
+        turn = 0
+
+    turn = int(turn) - 1
+
+    if turn < 0:
+        turn = 0
+
+    new_replay = "/replay?game-id=" + game_id + "&turn=" + str(turn)
+
+    return redirect(new_replay)
 
 if __name__ == "__main__":
     app.run(debug=True)
