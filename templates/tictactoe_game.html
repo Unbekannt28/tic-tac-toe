@@ -51,7 +51,7 @@
             </button>
         </div>
         <div class="right-section">
-            {% if session["logged_in"] %}line-height: 1;
+            {% if session["logged_in"] %}
                 <div class="icon-text-display">
                     <span class="mdi mdi-account"></span>
                     <p class="icon-text-display">{{session["username"]}}</p>
@@ -79,7 +79,10 @@
                 <a href="login/end_session" class="icon-text-button">
                     <span class="mdi mdi-logout"></span>
                     <p>Logout</p>
-                </a>    width: calc(min(5%, 5cqmin) * 16);tline"></span>
+                </a>
+            {% else %}
+                <a href="login" class="icon-text-button">
+                    <span class="mdi mdi-account-outline"></span>
                     <p>Login</p>
                 </a>
             {% endif %}
