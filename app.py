@@ -268,7 +268,7 @@ def move():
 
     #Check if player is looged in
     if session.get("logged_in") == None or not session.get("logged_in"):
-        return redirect("/play?message=not_logged_in")
+        return redirect("/lobby")
 
 
     game_id = session.get("game_id")
