@@ -1,5 +1,10 @@
 # Tic Tac Toe Multiplayer Game
+## Overview
 This game was developed for a programming project during our Computer Science studies at Christian Albrechts University Kiel.
+
+Our Tic-Tac-Toe Website allows you to play against your friends while both parties are using seperate browsers. As this site uses server-side rendering it may take a fow seconds before you can see your opponents move, but aside that everything should work just as you expect.
+
+Have fun playing!
 ## Structure
 ### Database
 ![UML scheme of Database](https://github.com/Unbekannt28/tic-tac-toe/blob/main/uml_diagram.svg "UML scheme of Database")
@@ -19,7 +24,7 @@ Activate the virtual enviroment. This step is different on Windows and Linux/mac
 
     <path>\Scripts\activate
 
-#### Linux:
+#### Linux / macOs:
 
     source <path>/bin/activate
 
