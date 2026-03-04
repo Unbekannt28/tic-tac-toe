@@ -235,6 +235,8 @@ def play():
 
     gameover = game_data[1]
 
+    winner_id = game_data[5]
+
     # Check if current turn is the users turn
     users_turn = False
     if row_count % 2 == 0 and session["user_id"] == game_data[3]: # even turn number and user is player 1
@@ -266,8 +268,18 @@ def play():
     if users_turn and not gameover:
         turn_reminder = True
 
+    #Adds result
+    game_over_state = None
+    if gameover:
+        if winner_id == session.get("user_id"):
+           game_over_state = "user_won"
+        elif winner_id is None:
+            game_over_state = "draw"
+        else:
+            game_over_state = "user_lost"
 
-    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover, player_name_1=player_name_1, player_name_2=player_name_2, turn_reminder=turn_reminder))
+
+    http_response = Response(render_template("tictactoe_game.html", message=message, fields = fields, gameover=gameover, player_name_1=player_name_1, player_name_2=player_name_2, turn_reminder=turn_reminder, game_over_state=game_over_state))
 
     # if current turn is not users turn: auto-refresh every 3 seconds
     if not users_turn and not gameover:

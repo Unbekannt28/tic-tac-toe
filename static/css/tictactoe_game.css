@@ -65,7 +65,9 @@ body {
     line-height: 1.2;
 }
 
-.turn_reminder_box {
+
+
+.basic_info_box {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,12 +80,13 @@ body {
 
 }
 
-.turn_reminder_box span {
+.basic_info_box span {
     font-size: max(2cqmin, calc(2cqh / 1.5)); 
     font-weight: bold;
     line-height: 1;
     box-sizing: border-box;
 }
+
 
 .err_box {
     display: flex;

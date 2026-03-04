@@ -123,8 +123,19 @@
                 {%endfor%}
             {%endfor%}
         </form>
-        {% if turn_reminder %}
-            <div class="turn_reminder_box">
+        {% if game_over_state is not none: %}
+            <div class="basic_info_box">
+                {% if game_over_state == "draw": %}
+                    <span>Keiner hat gewonnen, dass passiert manchmal.</span>
+                {% elif game_over_state == "user_won": %}
+                    <span>Du hat gewonnen!</span>
+                {% elif game_over_state == "user_lost": %}
+                    <span>Du hast verloren!</span>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if turn_reminder: %}
+            <div class="basic_info_box">
                 <span>
                     Du bist am Zug. Klicke auf eines der hellen Felder, um es zu markieren!
                 </span>
